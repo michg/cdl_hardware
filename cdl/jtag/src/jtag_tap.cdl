@@ -129,12 +129,13 @@ machine, holds an IR, and interacts with a client to capture and update data.
 {
     clocked clock jtag_tck reset active_low reset_n t_jtag_state jtag_state = {*=0};
     comb t_jtag_combs jtag_combs;
+    clocked clock falling jtag_tck reset active_low reset_n bit tdo = 0;
 
     /*b Wire outputs */
     wiring """
     Wire the outputs to depend on state (dr_action is a state decode)
     """ : {
-        tdo = jtag_state.sr[0];
+        tdo <= jtag_state.sr[0];
         ir = jtag_state.ir;
         dr_in = jtag_state.sr[dr_length; 0]; // dr_in to the client
         dr_action = jtag_combs.dr_action;    // dr_action to the client
